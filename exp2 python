@@ -1,0 +1,82 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Clear equivalent
+plt.close('all')
+
+# Input Parameters
+channels_900 = 10
+channels_1900 = 10
+
+total_channels = channels_900 + channels_1900
+
+subscribers = 15000
+
+R = 15          # Cell radius in km
+N = 7           # Cluster size
+
+# Frequency Reuse Distance
+D = np.sqrt(3 * N) * R
+
+print(f'Total Channels = {total_channels}')
+print(f'Cluster Size = {N}')
+print(f'Reuse Distance = {D:.2f} km')
+
+# Channel Allocation
+channels_per_cell = total_channels / N
+
+print(f'Channels per Cell = {channels_per_cell:.2f}')
+
+# Assume 21 cells
+cells = 21
+
+# Capacity Estimation
+users_per_channel = 30
+
+capacity = total_channels * users_per_channel * cells
+
+print(f'Estimated Capacity = {capacity} users')
+
+# Dynamic Allocation Simulation
+traffic = np.random.randint(50, 101, cells)
+
+allocated = np.minimum(traffic, total_channels * users_per_channel)
+
+# Traffic Demand Graph
+plt.figure()
+plt.bar(range(1, cells + 1), traffic)
+plt.title('Traffic Demand per Cell')
+plt.xlabel('Cell Number')
+plt.ylabel('Users')
+
+# Allocated Users Graph
+plt.figure()
+plt.bar(range(1, cells + 1), allocated)
+plt.title('Allocated Users per Cell')
+plt.xlabel('Cell Number')
+plt.ylabel('Allocated Capacity')
+
+# Call Drop Estimation
+call_drop_rate = np.maximum(0, (traffic - allocated) / traffic)
+
+# Call Drop Graph
+plt.figure()
+plt.plot(range(1, cells + 1), call_drop_rate, linewidth=2)
+plt.title('Call Drop Rate')
+plt.xlabel('Cell Number')
+plt.ylabel('Drop Rate')
+
+avg_drop = np.mean(call_drop_rate)
+
+print(f'Average Call Drop Rate = {avg_drop:.4f}')
+
+# Revenue Calculation
+revenue_per_user = 100   # assumed revenue per user
+
+served_users = min(subscribers, capacity)
+
+total_revenue = served_users * revenue_per_user
+
+print(f'Total Revenue = Rs. {total_revenue:.2f}')
+
+plt.show()
