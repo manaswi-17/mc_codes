@@ -1,0 +1,90 @@
+python code :-
+import numpy as np
+c1 = [1,1,1,1] 
+c2 = [1,-1,1,-1] 
+c3 = [1,1,-1,-1] 
+c4 = [1,-1,-1,1]
+rc =[]
+print("Enter the data bits :")
+d1 = int(input("Enter D1 :"))
+d2 = int(input("Enter D2 :")) 
+d3 = int(input("Enter D3 :")) 
+d4 = int(input("Enter D4 :"))
+r1 = np.multiply(c1,d1) 
+r2 = np.multiply(c2,d2) 
+r3 = np.multiply(c3,d3) 
+r4 = np.multiply(c4,d4)
+resultant_channel = r1 + r2 + r3 + r4
+print("Resultant Channel", resultant_channel)
+Channel = int(input("Enter the station to listen for C1=1 ,C2=2, C3=3 C4=4 : "))
+if Channel == 1:
+ rc = c1 
+elif Channel == 2:
+ rc = c2 
+elif Channel == 3:
+ rc = c3 
+elif Channel == 4:
+ rc = c4
+inner_product = np.multiply(resultant_channel, rc)
+print("Inner Product", inner_product)
+res1 = sum(inner_product)
+
+data = res1 / len(inner_product)
+print("Data bit that was sent", data)
+##################################################
+octave code:-
+clc;
+clear;
+close all;
+
+% Spreading Codes
+c1 = [1 1 1 1];
+c2 = [1 -1 1 -1];
+c3 = [1 1 -1 -1];
+c4 = [1 -1 -1 1];
+
+% Input Data
+d1 = input('Enter d1 (1 or -1): ');
+d2 = input('Enter d2 (1 or -1): ');
+d3 = input('Enter d3 (1 or -1): ');
+d4 = input('Enter d4 (1 or -1): ');
+
+% Encoding
+r1 = d1 .* c1;
+r2 = d2 .* c2;
+r3 = d3 .* c3;
+r4 = d4 .* c4;
+
+% Resultant Channel
+resultant_channel = r1 + r2 + r3 + r4;
+
+disp('Resultant Channel:');
+disp(resultant_channel);
+
+% Select Channel
+channel = input('Which channel to listen (1-4): ');
+
+if channel == 1
+    rc = c1;
+elseif channel == 2
+    rc = c2;
+elseif channel == 3
+    rc = c3;
+elseif channel == 4
+    rc = c4;
+else
+    disp('Invalid Channel');
+end
+
+% Decoding
+inner_product = resultant_channel .* rc;
+
+disp('Inner Product:');
+disp(inner_product);
+
+res = sum(inner_product);
+
+data = res / length(rc);
+
+disp('Recovered Data:');
+disp(data);
